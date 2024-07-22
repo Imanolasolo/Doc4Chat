@@ -40,6 +40,8 @@ def generate_response(input_text, pdf_text, openai_api_key):
             break
     return response
 
+st.set_page_config(page_title="Doc4Chat", page_icon="🦜")
+
 # Sidebar - Input OpenAI API key
 openai_api_key = st.sidebar.text_input('OpenAI API Key', type='password')
 st.sidebar.write("Do you want to get your OpenAI API key?")
