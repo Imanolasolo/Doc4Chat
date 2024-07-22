@@ -55,7 +55,7 @@ with st.sidebar.expander("Instructions"):
     st.write("""
     1. **Input your OpenAI API key**: Enter your OpenAI API key in the provided field.
     2. **Upload your knowledge base PDF**: Upload the PDF file containing the information you want to chat about.
-    3. **Chat with Neochat**: Type your question in the input box and click 'Ask' to chat with Neochat based on your uploaded knowledge base.
+    3. **Chat with Doc4Chatt**: Type your question in the input box and click 'Ask' to chat with Doc4Chat based on your uploaded knowledge base.
     """)
 
 st.sidebar.markdown("[Powered by Botarmy Hub, chat with us for AI consultancy](https://botarmy-chat.streamlit.app/)")
