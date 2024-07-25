@@ -47,8 +47,8 @@ openai_api_key = st.sidebar.text_input('OpenAI API Key', type='password')
 st.sidebar.write("Do you want to get your OpenAI API key?")
 st.sidebar.markdown("[Get a free OpenAI API key](https://gptforwork.com/help/knowledge-base/create-openai-api-key)")
 
-st.title('🦜Doc4Chat')
-st.info("Discover answers instantly with Doc4Chat, your personal knowledge assistant!")
+st.title('🦜 :red[Doc4Chat:] Interact with Your PDFs in a Conversational Way')
+st.subheader('Load your PDF, ask questions, and receive answers directly from the document.')
 
 # Sidebar - Dropdown menu with instructions
 with st.sidebar.expander("Instructions"):

@@ -1,6 +1,3 @@
-Here's a `README.md` for your `Doc4Chat` project:
-
-```markdown
 # Doc4Chat
 
 **Doc4Chat** is an interactive application powered by Botarmy Hub that allows you to chat with a knowledge assistant based on the content of a PDF file you upload. It leverages OpenAI's language models to provide responses based on your document's content.
@@ -79,4 +76,4 @@ For questions or feedback, please contact [Imanol Asolo](mailto:jjusturi@gmail.c
 
 - Powered by Botarmy Hub.
 - Utilizes OpenAI language models.
-```
+
