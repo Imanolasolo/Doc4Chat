@@ -1,6 +1,72 @@
 import streamlit as st
+st.set_page_config(page_title="Doc4Chat", page_icon="🦜")
 import fitz  # PyMuPDF library
 from langchain.llms import OpenAI
+
+# --- Traducción simple (diccionario) ---
+TRANSLATIONS = {
+    "en": {
+        "title": "🦜 Doc4Chat: Interact with Your PDFs in a Conversational Way",
+        "subtitle": "Load your PDF, ask questions, and receive answers directly from the document.",
+        "sidebar_api": "OpenAI API Key",
+        "sidebar_get_key": "Do you want to get your OpenAI API key?",
+        "sidebar_get_key_link": "[Get a free OpenAI API key](https://gptforwork.com/help/knowledge-base/create-openai-api-key)",
+        "sidebar_instructions": "Instructions",
+        "instructions": """
+1. **Input your OpenAI API key**: Enter your OpenAI API key in the provided field.
+2. **Upload your knowledge base PDF**: Upload the PDF file containing the information you want to chat about.
+3. **Chat with Doc4Chat**: Type your question in the input box and click 'Ask' to chat with Doc4Chat based on your uploaded knowledge base.
+""",
+        "sidebar_powered": (
+            '<a href="https://wa.me/593993513082?text=I%20am%20interested%20in%20AI%20consultancy" target="_blank">'
+            '💬 Contact us on WhatsApp for AI consultancy</a>'
+        ),
+        "upload_label": "Upload PDF file about the topic",
+        "welcome": "Welcome to Doc4Chat! Feel free to ask any questions about the topic.",
+        "you": "You:",
+        "ask": "Ask",
+        "response_prefix": "Doc4Chat:",
+        "error_api": "Please enter your OpenAI API key in the sidebar."
+    },
+    "es": {
+        "title": "🦜 Doc4Chat: Interactúa con tus PDFs de forma conversacional",
+        "subtitle": "Carga tu PDF, haz preguntas y recibe respuestas directamente del documento.",
+        "sidebar_api": "Clave API de OpenAI",
+        "sidebar_get_key": "¿Quieres obtener tu clave API de OpenAI?",
+        "sidebar_get_key_link": "[Obtén una clave API gratuita de OpenAI](https://gptforwork.com/help/knowledge-base/create-openai-api-key)",
+        "sidebar_instructions": "Instrucciones",
+        "instructions": """
+1. **Introduce tu clave API de OpenAI**: Ingresa tu clave API de OpenAI en el campo proporcionado.
+2. **Sube tu PDF base de conocimiento**: Sube el archivo PDF con la información sobre la que quieres chatear.
+3. **Chatea con Doc4Chat**: Escribe tu pregunta en la caja de texto y haz clic en 'Preguntar' para conversar con Doc4Chat usando tu PDF.
+""",
+        "sidebar_powered": (
+            '<a href="https://wa.me/593993513082?text=estoy%20interesado%20en%20consultoria%20IA" target="_blank">'
+            '💬 Contáctanos por WhatsApp para consultoría IA</a>'
+        ),
+        "upload_label": "Sube un archivo PDF sobre el tema",
+        "welcome": "¡Bienvenido a Doc4Chat! Puedes hacer cualquier pregunta sobre el tema.",
+        "you": "Tú:",
+        "ask": "Preguntar",
+        "response_prefix": "Doc4Chat:",
+        "error_api": "Por favor, introduce tu clave API de OpenAI en la barra lateral."
+    }
+}
+
+# --- Estado de idioma ---
+if "lang" not in st.session_state:
+    st.session_state.lang = "en"
+
+# --- Selector de idioma ---
+col_lang1, col_lang2 = st.columns([1, 1])
+with col_lang1:
+    if st.button("English"):
+        st.session_state.lang = "en"
+with col_lang2:
+    if st.button("Español"):
+        st.session_state.lang = "es"
+
+T = TRANSLATIONS[st.session_state.lang]
 
 # Function to extract text from PDF file
 def extract_text_from_pdf(file):
@@ -40,12 +106,10 @@ def generate_response(input_text, pdf_text, openai_api_key):
             break
     return response
 
-st.set_page_config(page_title="Doc4Chat", page_icon="🦜")
-
 # Sidebar - Input OpenAI API key
-openai_api_key = st.sidebar.text_input('OpenAI API Key', type='password')
-st.sidebar.write("Do you want to get your OpenAI API key?")
-st.sidebar.markdown("[Get a free OpenAI API key](https://gptforwork.com/help/knowledge-base/create-openai-api-key)")
+openai_api_key = st.sidebar.text_input(T["sidebar_api"], type='password')
+st.sidebar.write(T["sidebar_get_key"])
+st.sidebar.markdown(T["sidebar_get_key_link"])
 
 st.markdown(
         f"""
@@ -59,33 +123,31 @@ st.markdown(
         unsafe_allow_html=True
     )
 
-st.title('🦜 :red[Doc4Chat:] Interact with Your PDFs in a Conversational Way')
-st.subheader('Load your PDF, ask questions, and receive answers directly from the document.')
+st.title(T["title"])
+st.subheader(T["subtitle"])
 
 # Sidebar - Dropdown menu with instructions
-with st.sidebar.expander("Instructions"):
-    st.write("""
-    1. **Input your OpenAI API key**: Enter your OpenAI API key in the provided field.
-    2. **Upload your knowledge base PDF**: Upload the PDF file containing the information you want to chat about.
-    3. **Chat with Doc4Chatt**: Type your question in the input box and click 'Ask' to chat with Doc4Chat based on your uploaded knowledge base.
-    """)
+with st.sidebar.expander(T["sidebar_instructions"]):
+    st.write(T["instructions"])
 
-st.sidebar.markdown("[Powered by Botarmy Hub, chat with us for AI consultancy](https://botarmy-chat.streamlit.app/)")
+st.sidebar.markdown(T["sidebar_powered"], unsafe_allow_html=True)
 
 # Upload PDF file about the topic
-uploaded_file = st.file_uploader("Upload PDF file about the topic", type="pdf")
+uploaded_file = st.file_uploader(T["upload_label"], type="pdf")
 
 if uploaded_file is not None:
     # Extract text from the uploaded PDF file
     pdf_text = extract_text_from_pdf(uploaded_file)
 
-    st.warning("Welcome to Doc4Chat! Feel free to ask any questions about the topic.")
+    st.warning(T["welcome"])
 
-    user_input = st.text_input("You:", "")
+    user_input = st.text_input(T["you"], "")
 
-    if st.button("Ask") and user_input:
-        if openai_api_key:
-            response = generate_response(user_input, pdf_text, openai_api_key)
-            st.info(f"Doc4Chat: {response}")
-        else:
-            st.error("Please enter your OpenAI API key in the sidebar.")
+    if st.button(T["ask"]):
+        if user_input:
+            if openai_api_key:
+                response = generate_response(user_input, pdf_text, openai_api_key)
+                st.info(f"{T['response_prefix']} {response}")
+            else:
+                st.error(T["error_api"])
+                st.error(T["error_api"])
